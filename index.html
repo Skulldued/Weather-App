@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather.com</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[black]">
+    <div
+      class="card mt-[80px] shadow-2xl shadow-cyan-500/50 max-w-[470px] bg-gradient-to-r from-cyan-500 to-blue-500 mx-auto text-white rounded-lg py-[40px] px-[35px] text-center"
+    >
+      <div class="search flex justify-center items-center">
+        <div class=" ">
+          <input
+            type="text"
+            class="px-[25px] text-[black] rounded-full py-[10px] search-input"
+            placeholder="Enter city name"
+            spellcheck="false"
+          />
+        </div>
+        <button
+          class="mx-[10px] flex justify-center items-center bg-[white] h-[50px] w-[50px] rounded-full butt"
+        >
+          <img src="assert/search.png" alt="" class="h-[40px] text-white" />
+        </button>
+      </div>
+
+      <div class="error">
+        <p class="text-center hidden text-[30px] py-[20px]">Invalid city name</p>
+      </div>
+
+      <div class="image-weather flex justify-center items-center">
+        <img src="assert/rain.png" alt="" class="weather-icon" />
+      </div>
+      <div class="text-center">
+        <h1 class="text-[30px] font-bold py-[20px] temp">22°C</h1>
+        <h1 class="text-[30px] font-bold py-[5px] city">New York</h1>
+      </div>
+
+      <div class="bottom flex justify-between mt-[30px]">
+        <div class="left flex items-center">
+          <img src="assert/humidity.png" alt="" class="h-[30px]" />
+          <div class="pl-[20px]">
+            <h1 class="text-[30px] humidity">50%</h1>
+            <p class="">humidity</p>
+          </div>
+        </div>
+        <div class="right flex">
+          <img src="assert/wind.png" alt="" class="w-[60px]" />
+          <div>
+            <h1 class="text-[30px] font-bold wind">15km/h</h1>
+            <p class="font-bold wind">Wind speed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const apiKey = "2ec0dbeb1c36bb4a2050c5c0f002a632";
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+
+        // if(response.status == 404){
+        //    document.querySelector(".error").style.display = "block"; 
+        // }
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+      const weatherIcon = document.querySelector(".weather-icon");
+      async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        var data = await response.json();
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML =
+          Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML =
+          data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+        console.log(data);
+
+        if (data.weather[0].main == "clouds") {
+          weatherIcon.src = "assert/clouds.png";
+        } else if (data.weather[0].main == "Clear") {
+          weatherIcon.src = "assert/clear.png";
+        } else if (data.weather[0].main == "Rain") {
+          weatherIcon.src = "assert/rain.png";
+        } else if (data.weather[0].main == "Mist") {
+          weatherIcon.src = "assert/mist.png";
+        } else if (data.weather[0].main == "Snow") {
+          weatherIcon.src = "assert/snow.png";
+        } else if (data.weather[0].main == "Drizzle") {
+          weatherIcon.src = "assert/drizzle.png";
+        }
+      }
+      
+    //   const del = document.querySelector(".butt");
+
+    //   del.addEventListener("click",(event)=>{
+    //              event.preventDefault();
+
+    //              const input = document.getElementsByClassName(".search-input");
+    //              input.value =" "
+
+    //   })
+
+      searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+      });
+      // checkWeather()
+    </script>
+  </body>
+</html>
